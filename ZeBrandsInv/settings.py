@@ -17,11 +17,6 @@ import environ
 env = environ.Env(
     DEBUG=(bool, True),
     SECRET_KEY=(str, "django-insecure-mw1@c1!bozar$nr3m*3lbi_v9x(t+jk-kc+5f5ynrlqg8t468n"),
-    DB_NAME=(str, "zebrands"),
-    USER=(str, "postgres"),
-    PASSWORD=(str, "123"),
-    HOST=(str, "localhost"),
-    PORT=(str, "5432"),
     DATABASE_URL=(str, "postgres://postgres:123@localhost:5432/zebrands"),
 )
 
@@ -33,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY", "django-insecure-mw1@c1!bozar$nr3m*3lbi_v9x(t+jk-kc+5f5ynrlqg8t468n")
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
@@ -58,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -138,6 +134,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
