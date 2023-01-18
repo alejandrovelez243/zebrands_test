@@ -63,3 +63,8 @@ To run the tests, `cd` into the directory where `manage.py` is:
 ```sh
 (.env)$ python manage.py test
 ```
+
+## Heroku page
+You can get access to the deplyed app in heroku on this page https://zebrands.herokuapp.com/
+
+and can go to https://zebrands.herokuapp.com/api and get the apis
