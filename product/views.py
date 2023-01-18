@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from rest_framework import permissions, viewsets
 from rest_framework.response import Response
@@ -22,12 +23,13 @@ class ProductViewSet(viewsets.ModelViewSet):
         response = super().create(request, *args, **kwargs)
 
         product = Product.objects.get(pk=response.data["id"])
+        emails = list(User.objects.filter(is_active=True).values_list("email", flat=True))
         # Todo agregar todos los admin activos
         send_mail(
             "New Product Created",
             f"A new product with name {product.name} and id {product.id} has been created.",
-            "from@example.com",
-            ["to@example.com"],
+            "alejandro-243@hotmail.com",
+            emails,
             fail_silently=False,
         )
 

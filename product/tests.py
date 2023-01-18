@@ -1,7 +1,10 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
+from rest_framework.test import APIRequestFactory, APITestCase, force_authenticate
 
 from product.models import Brand, Product
 from product.serializers import ProductSerializer
+from product.views import ProductViewSet
 
 
 class ProductSerializerTest(TestCase):
@@ -46,3 +49,57 @@ class ProductSerializerTest(TestCase):
         serializer = ProductSerializer(data=self.serializer_data)
         self.assertTrue(serializer.is_valid())
         self.assertEqual(serializer.validated_data["brand"], self.brand)
+
+
+class ProductAPITest(APITestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.user = User.objects.create_user(
+            username="test", email="test@test.com", password="glass onion"
+        )
+        self.brand = Brand.objects.create(name="Test Brand")
+        self.new_brand = Brand.objects.create(name="New Brand")
+        self.product = Product.objects.create(
+            id=2, sku="SKU123", name="Test Product", brand=self.brand
+        )
+
+    def test_list_products(self):
+        view = ProductViewSet.as_view(actions={"get": "list"})
+        request = self.factory.get("/products/")
+        response = view(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["sku"], "SKU123")
+        self.assertEqual(response.data[0]["name"], "Test Product")
+        self.assertEqual(response.data[0]["brand"], "Test Brand")
+
+    def test_create_product(self):
+        view = ProductViewSet.as_view(actions={"post": "create"})
+        data = {"sku": "SKY456", "name": "Test Product 2", "brand": self.new_brand.name}
+        request = self.factory.post("/products/", data)
+        force_authenticate(request, user=self.user)
+        response = view(request)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Product.objects.count(), 2)
+        self.assertEqual(Product.objects.get(sku="SKY456").name, "Test Product 2")
+
+    def test_update_product(self):
+        view = ProductViewSet.as_view(actions={"put": "update"})
+        data = {"name": "Updated Name", "sku": "SKU123", "brand": "Test Brand"}
+        request = self.factory.put("/products/", data)
+        force_authenticate(request, user=self.user)
+        response = view(request, pk=2)
+        print(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Product.objects.get(pk=2).name, "Updated Name")
+
+    def test_retrieve_product(self):
+        view = ProductViewSet.as_view(actions={"get": "retrieve"})
+        request = self.factory.get("/products/1/")
+        force_authenticate(request, user=self.user)
+        response = view(request, pk=2)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["sku"], "SKU123")
+        self.assertEqual(response.data["name"], "Test Product")
+        self.assertEqual(response.data["brand"], "Test Brand")
+        self.assertEqual(Product.objects.get(pk=2).called, 1)
