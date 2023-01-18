@@ -1,11 +1,14 @@
 from rest_framework import serializers
-from production.models import Product, Brand
+from product.models import Product, Brand
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    brande = serializers.SlugField(
+    brand = serializers.SlugRelatedField(
+        many=False,
+        slug_field='name',
+        queryset=Brand.objects.filter(status=True)
+     )
 
-    )
     class Meta:
         model = Product
-        fields = ['id', 'sky', 'name', 'brand']
+        fields = ['id', 'sku', 'name', 'brand']
