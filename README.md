@@ -68,3 +68,57 @@ To run the tests, `cd` into the directory where `manage.py` is:
 You can get access to the deplyed app in heroku on this page https://zebrands.herokuapp.com/
 
 and can go to https://zebrands.herokuapp.com/api and get the apis
+
+
+# API Documentation
+
+## Token
+This apis response with a valid token for the user that is on the body with the password
+```sh
+curl --location --request POST 'https://zebrands.herokuapp.com/token/' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username": "username",
+    "password": "password"
+}'
+```
+as test proposes, you can use the username=admin, and password=abc1234*
+
+## Products apis
+These apis contains all related to the product.
+### list
+Returns the list of all products even if the user is not authenticated
+```sh
+curl --location --request GET 'https://zebrands.herokuapp.com/api/products/' \
+--header 'Authorization: Token {Valid token}'
+```
+In this case you can see the token in the header, but is just to show you how can we authenticate
+the user, due it is not required.
+### Create
+```sh
+curl --location --request POST 'https://zebrands.herokuapp.com/api/products/' \
+--header 'Authorization: Token {Valid token}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "sku": "123",
+    "name": "Sales force 1",
+    "brand": "nike"
+}'
+```
+### Update
+```sh
+curl --location --request PUT 'https://zebrands.herokuapp.com/api/products/{id}/' \
+--header 'Authorization: Token {Valid token}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": 1,
+    "sku": "123",
+    "name": "Sales force 1",
+    "brand": "nike"
+}'
+```
+### Delete
+```sh
+curl --location --request DELETE 'https://zebrands.herokuapp.com/api/products/{id}/' \
+--header 'Authorization: Token {Valid token}'
+```
