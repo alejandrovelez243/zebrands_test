@@ -12,6 +12,19 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, True),
+    SECRET_KEY=(str, "django-insecure-mw1@c1!bozar$nr3m*3lbi_v9x(t+jk-kc+5f5ynrlqg8t468n"),
+    DB_NAME=(str, "zebrands"),
+    USER=(str, "postgres"),
+    PASSWORD=(str, "123"),
+    HOST=(str, "localhost"),
+    PORT=(str, "5432"),
+    DATABASE_URL=(str, "postgres://postgres:123@localhost:5432/zebrands"),
+)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +33,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-mw1@c1!bozar$nr3m*3lbi_v9x(t+jk-kc+5f5ynrlqg8t468n"
+SECRET_KEY = env("SECRET_KEY", "django-insecure-mw1@c1!bozar$nr3m*3lbi_v9x(t+jk-kc+5f5ynrlqg8t468n")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -85,16 +98,7 @@ WSGI_APPLICATION = "ZeBrandsInv.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "zebrands",
-        "USER": "postgres",
-        "PASSWORD": "123",
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
-}
+DATABASES = {"default": env.db()}
 
 
 # Password validation
