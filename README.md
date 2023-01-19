@@ -118,3 +118,11 @@ curl --location --request PUT 'https://zebrands.herokuapp.com/api/products/{id}/
 curl --location --request DELETE 'https://zebrands.herokuapp.com/api/products/{id}/' \
 --header 'Authorization: Token {Valid token}'
 ```
+# Pre-commit
+Pre commit is a library that helps with the code quality, you can setup and run with the following commands:
+```sh
+pip install pre-commit
+pre-commit install
+```
+with this every time that you run the git commit command, pre-commit will run and solve your code issues and let you
+know which you have that it can't solve.
