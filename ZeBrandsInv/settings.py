@@ -20,6 +20,7 @@ env = environ.Env(
     DEBUG=(bool, True),
     SECRET_KEY=(str, "django-insecure-mw1@c1!bozar$nr3m*3lbi_v9x(t+jk-kc+5f5ynrlqg8t468n"),
     DATABASE_URL=(str, "postgres://postgres:123@localhost:5432/zebrands"),
+    SLACK_URL=(str, None),
     SENTRY_DSN=(str, None),
 )
 
@@ -150,6 +151,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 if not DEBUG:
 
+    SLACK_URL = env("SLACK_URL")
     # Sentry integration
     sentry_sdk.init(
         dsn=env("SENTRY_DSN"),
