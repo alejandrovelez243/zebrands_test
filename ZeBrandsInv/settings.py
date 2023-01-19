@@ -20,10 +20,6 @@ env = environ.Env(
     DEBUG=(bool, True),
     SECRET_KEY=(str, "django-insecure-mw1@c1!bozar$nr3m*3lbi_v9x(t+jk-kc+5f5ynrlqg8t468n"),
     DATABASE_URL=(str, "postgres://postgres:123@localhost:5432/zebrands"),
-    EMAIL_HOST=(str, None),
-    EMAIL_PORT=(int, None),
-    EMAIL_HOST_USER=(str, None),
-    EMAIL_HOST_PASSWORD=(str, None),
     SENTRY_DSN=(str, None),
 )
 
@@ -90,7 +86,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-            ],
+            ]
         },
     },
 ]
@@ -152,17 +148,9 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-# Sentry integration
 if not DEBUG:
 
-    # Email configurations
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_USE_TLS = True
-    EMAIL_HOST = env("EMAIL_HOST")
-    EMAIL_PORT = env("EMAIL_PORT")
-    EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-
+    # Sentry integration
     sentry_sdk.init(
         dsn=env("SENTRY_DSN"),
         integrations=[
