@@ -33,19 +33,15 @@ Then install the dependencies:
 (.env)$ pip install -r requirements.dev.txt
 ```
 
-Then go to the setting.py file and change the databse credentials for your own
-```python
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "db_name",
-        "USER": "username",
-        "PASSWORD": "password",
-        "HOST": "hostname",
-        "PORT": "5432",
-    }
-}
+Create a postgres db in your local env with the following values:
+```sh
+username=postgres
+password=123
+host=localhost
+port=5432
+db_name=zebrands
 ```
+
 
 Once `pip` has finished downloading the dependencies and you have configured your database credentials:
 ```sh
